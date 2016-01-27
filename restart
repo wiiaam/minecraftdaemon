@@ -1,0 +1,22 @@
+#!/bin/sh
+
+
+
+DIR=$(dirname $0)
+
+$DIR/say "The server is about to restart!"
+sleep 5
+$DIR/say "Restarting in 5..."
+sleep 1
+$DIR/say "Restarting in 4..."
+sleep 1
+$DIR/say "Restarting in 3..."
+sleep 1
+$DIR/say "Restarting in 2..."
+sleep 1
+$DIR/say "Restarting in 1..."
+sleep 1
+sleep 5
+$DIR/stop
+sleep 10
+$DIR/start

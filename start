@@ -1,0 +1,9 @@
+#!/bin/sh
+
+SERVERJAR=minecraft_server.jar
+JAVAOPTS= -server -Xmx1024M -XX:+UseConcMarkSweepGC -XX:+UseParNewGC -XX:+CMSIncrementalPacing -XX:ParallelGCThreads=2 -XX:+AggressiveOpts
+
+cd $(dirname $0)
+screenname=$(head -n 1 $(dirname $0)/screenname.txt)
+
+screen -dmS $screenname java $JAVAOPTS -jar $SERVERJAR nogui

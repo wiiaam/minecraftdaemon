@@ -1,10 +1,13 @@
 #!/bin/sh
 
 RUNAS=root
-MINECRAFTHOME=$(dirname $0)
+MINECRAFTHOME="$( dirname $(realpath $0))"
+
+SCREEN=$(head -n 1 $MINECRAFTHOME/screenname.txt)
+
 
 start() {
-  if screen -list | grep -q "minecraft"; then
+  if su -c "screen -list | grep -q \"$SCREEN\""  $RUNAS; then
     echo 'Server already running'
     return 1
   fi
@@ -14,7 +17,7 @@ start() {
 }
 
 stop() {
-  if ! su -c 'screen -list | grep -q "minecraft"' $RUNAS; then
+  if ! su -c "screen -list | grep -q \"$SCREEN\""  $RUNAS; then
     echo 'Server not running'
     exit 1
   fi
@@ -24,12 +27,21 @@ stop() {
 }
 
 restart() {
-  if ! su -c 'screen -list | grep -q "minecraft"' $RUNAS; then
+  if ! su -c "screen -list | grep -q \"$SCREEN\""  $RUNAS; then
     echo 'Server not running'
     start
     exit 1
   fi
-  su -c "$MINECRAFTHOMErestart" $RUNAS
+  su -c "$MINECRAFTHOME/restart" $RUNAS
+  echo 'Server restarted'
+}
+
+status() {
+  if ! su -c "screen -list | grep -q \"$SCREEN\""  $RUNAS; then
+    echo 'Server not running'
+  else
+    echo 'Server running'
+  fi
 }
 
 
@@ -43,6 +55,9 @@ case "$1" in
   restart)
     restart
     ;;
+  status)
+    status
+    ;;
   *)
-    echo "Usage: $0 {start|stop|restart}"
+    echo "Usage: $0 {start|stop|restart|status}"
 esac

@@ -2,7 +2,7 @@
 
 
 
-DIR=$(dirname $0)
+DIR="$( dirname $(realpath $0))"
 
 $DIR/say "The server is about to restart!"
 sleep 5
